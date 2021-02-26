@@ -123,6 +123,7 @@ function Home(){
     </div>
 }
 
+
 class Home2 extends React.Component{
     constructor (props) {
         super(props),
@@ -163,3 +164,4 @@ class Home2 extends React.Component{
 }
 
 ReactDOM.render(<Home2 />, document.querySelector('#app'))
+
