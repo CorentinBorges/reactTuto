@@ -123,4 +123,43 @@ function Home(){
     </div>
 }
 
-ReactDOM.render(<Home />, document.querySelector('#app'))
+class Home2 extends React.Component{
+    constructor (props) {
+        super(props),
+        this.state=  {
+            nom: 'Jean',
+            sel: ['demo2', 'demo1']
+        }
+        this.handleChange=this.handleChange.bind(this);
+        this.handleChangeSel=this.handleChangeSel.bind(this);
+
+    }
+    
+    handleChange(e){
+        this.setState({nom: e.target.value})
+    }
+
+    handleChangeSel(e){
+        this.setState({
+            sel: Array.from(e.target.selectedOptions).map(o => o.value)
+        })
+        
+    }
+
+    render() {
+        return <div>
+            <label htmlFor="nom">Mon nom</label>
+            <textarea type="text" id="nom" name="nom" value={this.state.nom} onChange={this.handleChange} ></textarea>
+            <p>{this.state.nom}</p>
+            <select value={this.state.sel} onChange={this.handleChangeSel} multiple>
+                <option value="demo1">Demo 1</option>
+                <option value="demo2">Demo 2</option>
+                <option value="demo3">Demo 3</option>
+            </select>
+            <p>Afficher values selected: {JSON.stringify(this.state.sel)}</p>
+        </div>
+    }
+
+}
+
+ReactDOM.render(<Home2 />, document.querySelector('#app'))
