@@ -129,13 +129,14 @@ class Home2 extends React.Component{
         super(props),
         this.state=  {
             nom: 'Jean',
-            sel: ['demo2', 'demo1']
+            sel: ['demo2', 'demo1'],
+            checked: true
         }
         this.handleChange=this.handleChange.bind(this);
         this.handleChangeSel=this.handleChangeSel.bind(this);
-
+        this.handleChangeCheck=this.handleChangeCheck.bind(this);
     }
-    
+
     handleChange(e){
         this.setState({nom: e.target.value})
     }
@@ -144,7 +145,12 @@ class Home2 extends React.Component{
         this.setState({
             sel: Array.from(e.target.selectedOptions).map(o => o.value)
         })
-        
+    }
+
+    handleChangeCheck(e){
+        this.setState({
+            checked: e.target.checked
+        })
     }
 
     render() {
@@ -158,10 +164,68 @@ class Home2 extends React.Component{
                 <option value="demo3">Demo 3</option>
             </select>
             <p>Afficher values selected: {JSON.stringify(this.state.sel)}</p>
+            <label htmlFor="check">Checked ?</label>
+            <input type="checkbox" id="check" checked={this.state.checked} onChange={this.handleChangeCheck}></input>
+           { this.state.checked ? <div> Un message affiché si je coche la checkbox</div> : null}
         </div>
     }
-
 }
 
-ReactDOM.render(<Home2 />, document.querySelector('#app'))
+
+function Field({name, value, onChange, children}){
+        return <div className="form-group">
+            <label htmlFor={name}>{children}</label>
+            <input type="text" onChange={onChange} id={name} className="form-control" name={name} value={value}  />
+        </div>
+}
+
+function Checkbox({name, value, onChange, children}){
+    return <div className="form-check">
+        <input type="checkbox" onChange={onChange} id={name} className="form-check-input" name={name} checked={value}  />
+        <label htmlFor={name} className="form-check-label">{children}</label>
+    </div>
+}
+
+class Home3 extends React.Component{
+
+    constructor (props) {
+        super(props),
+        this.state=  {
+            nom: '',
+            prenom: '',
+            newsletter: false
+        }
+        this.handleChange=this.handleChange.bind(this);
+        this.handleSubmit=this.handleSubmit.bind(this);
+
+    }
+
+    handleChange(e){
+        const name= e.target.name;
+        const type=e.target.type;
+        const value= type === 'checkbox' ? e.target.checked :  e.target.value
+
+        this.setState({
+            [name]: value
+        })
+    }
+
+    handleSubmit(e){
+        e.preventDefault()
+        const data= JSON.stringify(this.state)
+        console.log(data)
+    }
+    render(){
+        return <form className="container"  onSubmit={this.handleSubmit}>
+                <Field name="nom" value={this.state.nom} onChange={this.handleChange} >Nom</Field>
+                <Field name="prenom" value={this.state.prenom} onChange={this.handleChange} >Prénom</Field>
+                <Checkbox name="newletter" value={this.state.newsletter} onChange={this.handleChange} >S'abonner à la newletter </Checkbox>
+                <div className="form-group">
+                    <button className="btn btn-primary">Envoyer</button>
+                </div>
+            </form>
+    }
+}
+
+ReactDOM.render(<Home3 />, document.querySelector('#app'))
 
